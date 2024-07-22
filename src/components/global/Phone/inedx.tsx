@@ -15,7 +15,7 @@ export default function Phone({
 }: Props) {
   return (
     <div
-      className={cn("pointer-events-none relative z-50 overflow-hidden")}
+      className={cn("z-5 pointer-events-none relative overflow-hidden")}
       {...props}
     >
       <Image
@@ -27,7 +27,7 @@ export default function Phone({
         alt="phone template"
         width={200}
         height={100}
-        className="pointer-events-none z-50 select-none"
+        className="pointer-events-none z-50 h-auto w-auto select-none"
       />
 
       <div className="absolute inset-0 -z-10">
@@ -35,7 +35,7 @@ export default function Phone({
           src={imgSrc}
           alt="overlaying phone image"
           fill
-          className="object-cover"
+          className="h-auto w-auto object-cover"
         />
       </div>
     </div>
