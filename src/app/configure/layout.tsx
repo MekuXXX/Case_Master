@@ -1,3 +1,4 @@
+import UploadSteps from "@/components/custom/UploadForm/UploadSteps";
 import MaxWidthWrapper from "@/components/global/MaxWidthWrapper";
 import React from "react";
 
@@ -6,5 +7,10 @@ type Props = {
 };
 
 export default function ConfigureLayout({ children }: Props) {
-  return <MaxWidthWrapper>{children}</MaxWidthWrapper>;
+  return (
+    <MaxWidthWrapper className="">
+      <UploadSteps />
+      {children}
+    </MaxWidthWrapper>
+  );
 }

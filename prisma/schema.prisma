@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ORDER_STATUS {
+  FULLFILLED
+  SHIPPED
+  AWAIT_SHIPMENT
+}
+
+enum PHONE_MODEL {
+  IPHONEX
+  IPHONE11
+  IPHONE12
+  IPHONE13
+  IPHONE14
+  IPHONE15
+}
+
+enum CASE_COLOR {
+  BLACK
+  BLUE
+  ROSE
+}
+
+enum CASE_MATERIAL {
+  SILICON
+  SOFT_POLYCARBONATE
+}
+
+enum CASE_FINISH {
+  SMOOTH
+  TEXTURED
+}
+
+model Configuration {
+  id              String         @id @default(cuid())
+  imageUrl        String
+  width           Int
+  height          Int
+  model           PHONE_MODEL?
+  color           CASE_COLOR?
+  material        CASE_MATERIAL?
+  finish          CASE_FINISH?
+  croppedImageUrl String?
+}

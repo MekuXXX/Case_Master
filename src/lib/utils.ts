@@ -38,3 +38,19 @@ export function splitArrayWithLength<T>(arr: Array<T>, partsLength: number) {
   const parts = Math.floor(arr.length / partsLength);
   return splitArrayWithLength(arr, parts);
 }
+
+export enum PRICE_TYPE {
+  USD = "USD",
+  JPY = "JPY",
+  EUR = "EUR",
+  CNY = "CNY",
+}
+
+export function formatPrice(price: number, type: PRICE_TYPE = PRICE_TYPE.USD) {
+  const formatter = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: type,
+  });
+
+  return formatter.format(price);
+}

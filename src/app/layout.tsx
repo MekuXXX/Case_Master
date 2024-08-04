@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Recursive } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/global/Navbar";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/global/Footer";
+import { Toaster } from "@/components/ui/toaster";
+import TanstackQueryProvider from "@/components/provider/TanstackQueryProvider";
 
-const inter = Inter({ subsets: ["latin"] });
+const recursive = Recursive({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,13 +23,16 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "flex min-h-screen flex-col justify-between",
-          inter.className,
+          "grainy-light flex min-h-screen flex-col",
+          recursive.className,
         )}
       >
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
+        <TanstackQueryProvider>
+          <Navbar />
+          <main className="flex-1">{children}</main>
+          <Footer />
+          <Toaster />
+        </TanstackQueryProvider>
       </body>
     </html>
   );

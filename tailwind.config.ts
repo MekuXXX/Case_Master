@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
+import { withUt } from "uploadthing/tw";
 
-const config = {
+const config = withUt({
   darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
@@ -80,16 +81,21 @@ const config = {
             transform: "translateY(-50%)",
           },
         },
+        flashing: {
+          "0%, 100%": { opacity: "0.2" },
+          "20%": { opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s linear forwards",
+        flashing: "flashing 1.4s infinite linear",
         marquee: "marquee var(--marquee-duration) linear infinite",
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config;
+}) satisfies Config;
 
 export default config;

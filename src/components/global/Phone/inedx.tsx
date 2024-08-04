@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import Image from "next/image";
 import React, { HTMLAttributes } from "react";
 
 type Props = HTMLAttributes<HTMLDivElement> & {
@@ -15,27 +14,27 @@ export default function Phone({
 }: Props) {
   return (
     <div
-      className={cn("z-5 pointer-events-none relative overflow-hidden")}
+      className={cn(
+        "pointer-events-none relative z-50 overflow-hidden",
+        className,
+      )}
       {...props}
     >
-      <Image
+      <img
         src={
           dark
             ? "/phone-template-dark-edges.png"
             : "/phone-template-white-edges.png"
         }
-        alt="phone template"
-        width={200}
-        height={100}
-        className="pointer-events-none z-50 h-auto w-auto select-none"
+        className="pointer-events-none z-50 select-none"
+        alt="phone image"
       />
 
       <div className="absolute inset-0 -z-10">
-        <Image
+        <img
+          className="min-h-full min-w-full object-cover"
           src={imgSrc}
           alt="overlaying phone image"
-          fill
-          className="h-auto w-auto object-cover"
         />
       </div>
     </div>
