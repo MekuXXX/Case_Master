@@ -2,6 +2,10 @@ import { getAuthStatus } from "@/actions/user";
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const res = await getAuthStatus();
-  return NextResponse.json(res, { status: 200 });
+  try {
+    const res = await getAuthStatus();
+    return NextResponse.json(res, { status: 200 });
+  } catch (error) {
+    return NextResponse.json({ success: false }, { status: 500 });
+  }
 }

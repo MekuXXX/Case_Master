@@ -13,7 +13,7 @@ export default function AuthCallbackPage({}: Props) {
     queryKey: ["auth-callback"],
     queryFn: async () => {
       // const res = await getAuthStatus(); // NOTE: There is problem when trying to use this action here as it return undefined
-      const res = await fetch("api/auth-status");
+      const res = await fetch("/api/auth-status");
       const data = await res.json();
       return data;
     },
@@ -36,7 +36,7 @@ export default function AuthCallbackPage({}: Props) {
         router.push(`/`);
       }
     }
-  }, [data]);
+  }, [data, configId, router]);
 
   return (
     <div className="mt-24 flex w-full justify-center">

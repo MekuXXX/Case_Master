@@ -7,8 +7,7 @@ import Stripe from "stripe";
 export async function POST(res: Request) {
   try {
     const body = await res.text();
-    const sig = headers().get("stripes-signature");
-
+    const sig = headers().get("stripe-signature");
     if (!sig) {
       return new Response("Invalid signature", { status: 400 });
     }
@@ -21,7 +20,7 @@ export async function POST(res: Request) {
 
     switch (event.type) {
       case "checkout.session.completed": {
-        if (event.data.object.customer_details?.email) {
+        if (!event.data.object.customer_details?.email) {
           throw new Error("Missing user email");
         }
 
@@ -37,7 +36,6 @@ export async function POST(res: Request) {
 
         const billingAddress = session.customer_details?.address;
         const shippingAddress = session.shipping_details?.address;
-
         await db.order.update({
           where: {
             id: orderId,

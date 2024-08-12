@@ -63,7 +63,7 @@ export async function createCheckoutSession({ configId }: CreateCheckoutType) {
     shipping_address_collection: { allowed_countries: ["DE", "EG", "US"] },
     metadata: {
       userId: user.id,
-      order: order.id,
+      orderId: order.id,
     },
     line_items: [{ price: product.default_price as string, quantity: 1 }],
   });

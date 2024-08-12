@@ -10,7 +10,6 @@ import { BASE_PRICE, PRODUCTS_PRICES } from "@/config/products";
 import { Button } from "@/components/ui/button";
 import { calculateTotalPrice } from "@/lib/configuration";
 import { useMutation } from "@tanstack/react-query";
-import { createCheckoutSession } from "@/actions/stripe";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
@@ -75,7 +74,7 @@ export default function DesignPreview({ config }: Props) {
 
   useEffect(() => {
     setShowConfetti(true);
-  });
+  }, [setShowConfetti]);
 
   return (
     <>
