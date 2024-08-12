@@ -9,13 +9,19 @@ import { ArrowRight, Check } from "lucide-react";
 import { BASE_PRICE, PRODUCTS_PRICES } from "@/config/products";
 import { Button } from "@/components/ui/button";
 import { calculateTotalPrice } from "@/lib/configuration";
+import { useMutation } from "@tanstack/react-query";
+import { createCheckoutSession } from "@/actions/stripe";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
+import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
+import LoginModal from "@/components/global/LoginModal";
 
 type Props = {
   config: Configuration;
 };
 
 export default function DesignPreview({ config }: Props) {
-  const { color, model, croppedImageUrl, finish, material } = config;
+  const { color, model, croppedImageUrl, finish, material, id } = config;
   const twColor = COLORS.find(
     (supportedColor) => supportedColor.value === color,
   )?.tw;
@@ -24,7 +30,48 @@ export default function DesignPreview({ config }: Props) {
   )?.label;
 
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
-  // const {} = useMu
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const router = useRouter();
+  const { toast } = useToast();
+  const { user } = useKindeBrowserClient();
+  const { mutate: createPaymentSession } = useMutation({
+    mutationKey: ["get-checkout-session"],
+    mutationFn: async ({ configId }: { configId: string }) => {
+      const res = await fetch("/api/stripe-session", {
+        method: "POST",
+        body: JSON.stringify({ configId }),
+      });
+      const data = (await res.json()) as { url: string | undefined };
+      console.log(data);
+      return data;
+    },
+    onSuccess: ({ url }) => {
+      console.log(url);
+      if (url) {
+        router.push(url);
+      } else {
+        throw new Error("Unable to retrieve payment URL");
+      }
+    },
+
+    onError: ({ message }) => {
+      console.log(message);
+      toast({
+        title: "Something went wrong",
+        description: "There was an error on our end. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleCheckoutSession = () => {
+    if (user) {
+      createPaymentSession({ configId: id });
+    } else {
+      window.localStorage.setItem("configId", id);
+      setIsLoginModalOpen(true);
+    }
+  };
 
   useEffect(() => {
     setShowConfetti(true);
@@ -38,6 +85,8 @@ export default function DesignPreview({ config }: Props) {
           config={{ elementCount: 400, spread: 90 }}
         />
       </div>
+
+      <LoginModal isOpen={isLoginModalOpen} setIsOpen={setIsLoginModalOpen} />
 
       <div className="mt-20 grid grid-cols-1 text-sm sm:grid-cols-12 sm:grid-rows-1 sm:gap-x-6 md:gap-x-8 lg:gap-x-12">
         <div className="sm:col-span-4 md:col-span-3 md:row-span-2 md:row-end-2">
@@ -116,8 +165,7 @@ export default function DesignPreview({ config }: Props) {
 
               <div className="mt-8 flex justify-end pb-12">
                 <Button
-                  isLoading
-                  loadingText="loading"
+                  onClick={() => handleCheckoutSession()}
                   className="px-4 sm:px-6 lg:px-8"
                 >
                   Check out <ArrowRight className="ml-1.5 inline h-4 w-4" />
