@@ -73,7 +73,7 @@ export default function DesignConfigurator({ config }: Props) {
   const router = useRouter();
   const { startUpload } = useUploadThing("imageUploader");
   const { toast } = useToast();
-  const { mutate: saveConfiguration } = useMutation({
+  const { mutate: saveConfiguration, isPending } = useMutation({
     mutationKey: ["save-config"],
     mutationFn: async (args: SaveConfigParams) => {
       await Promise.all([saveConfig(), saveConfigAction(args)]);
@@ -379,6 +379,8 @@ export default function DesignConfigurator({ config }: Props) {
                 }
                 size="sm"
                 className="w-full"
+                isLoading={isPending}
+                loadingText="Saving"
               >
                 Continue
                 <ArrowRight className="ml-1.5 inline h-4 w-4" />
