@@ -12,7 +12,7 @@ import {
 
 export const COLORS = [
   {
-    label: "Black",
+    label: "Black", // Default
     value: CASE_COLOR.BLACK,
     tw: "zinc-900",
   },

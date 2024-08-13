@@ -70,3 +70,35 @@ export async function createCheckoutSession({ configId }: CreateCheckoutType) {
 
   return { url: stripeSession.url };
 }
+
+type GetPaymentStatusParams = {
+  orderId: string;
+};
+export async function getPaymentStatus(params: GetPaymentStatusParams) {
+  const { getUser } = getKindeServerSession();
+  const user = await getUser();
+
+  if (!user?.id || !user?.email) {
+    throw new Error("You need to be logged in to view this page");
+  }
+
+  const order = await db.order.findUnique({
+    where: { id: params.orderId },
+    include: {
+      shippingAddress: true,
+      billingAddress: true,
+      configuration: true,
+      user: true,
+    },
+  });
+
+  if (!order) {
+    throw new Error("This order is not exist");
+  }
+
+  if (!order.isPaid) {
+    return { success: false };
+  }
+
+  return { success: true, order };
+}

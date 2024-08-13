@@ -130,12 +130,13 @@ export default function DesignConfigurator({ config }: Props) {
       const blob = convertBase64ToBlob(base64Data, BLOB_TYPE.PNG);
       const file = new File(
         [blob],
-        `image-${config.id.slice(-8)}-${new Date().getSeconds()}`,
+        `image-${config.id.slice(-8)}-${new Date().getSeconds()}.png`,
         {
           type: BLOB_TYPE.PNG,
         },
       );
-      await startUpload([file], { configId: config.id });
+
+      const res = await startUpload([file], { configId: config.id });
     } catch (error) {
       toast({
         title: "Something went wrong",
@@ -249,7 +250,7 @@ export default function DesignConfigurator({ config }: Props) {
                   </div>
                 </RadioGroup>
 
-                <div className="relative flex w-full flex-col gap-3">
+                <div className="relative z-[999999] flex w-full flex-col gap-3">
                   <Label>Model:</Label>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -263,7 +264,7 @@ export default function DesignConfigurator({ config }: Props) {
                       </Button>
                     </DropdownMenuTrigger>
 
-                    <DropdownMenuContent>
+                    <DropdownMenuContent className="rounded-lg bg-zinc-200">
                       {MODELS.options.map((model) => (
                         <DropdownMenuItem
                           key={model.label}

@@ -70,7 +70,7 @@ export default function UploadForm({}: Props) {
         >
           {({ getRootProps, getInputProps }) => (
             <div
-              className="flex h-full w-full flex-1 flex-col items-center justify-center"
+              className="flex h-full min-h-[40vh] w-full flex-1 flex-col items-center justify-center lg:min-h-[60vh]"
               {...getRootProps()}
             >
               <Input {...getInputProps()} />
