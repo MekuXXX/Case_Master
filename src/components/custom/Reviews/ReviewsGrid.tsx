@@ -27,7 +27,7 @@ export default function ReviewsGrid({}: Props) {
   return (
     <div
       ref={containerRef}
-      className="relative -mx-4 mt-16 h-[49rem] max-h-[150vh] grid-cols-1 items-center gap-8 overflow-clip px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3"
+      className="relative -mx-4 mt-16 grid h-[49rem] max-h-[150vh] grid-cols-1 items-start gap-8 overflow-hidden px-4 sm:mt-20 md:grid-cols-2 lg:grid-cols-3"
     >
       {isInView ? (
         <>

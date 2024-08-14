@@ -77,7 +77,7 @@ const config = withUt({
           },
         },
         marquee: {
-          "100": {
+          "100%": {
             transform: "translateY(-50%)",
           },
         },

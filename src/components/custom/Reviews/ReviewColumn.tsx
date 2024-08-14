@@ -18,7 +18,6 @@ export default function ReviewColumn({
 }: Props) {
   const columnRef = useRef<HTMLDivElement | null>(null);
   const [columnHeight, setColumnHeight] = useState(0);
-  console.log(columnHeight);
   const duration = `${columnHeight * msPerPixel}ms`;
 
   useEffect(() => {
@@ -33,7 +32,7 @@ export default function ReviewColumn({
     return () => {
       resizeObserver.disconnect();
     };
-  });
+  }, []);
 
   return (
     <div

@@ -11,9 +11,9 @@ export default function Reviews({}: Props) {
       <Image
         src={"/what-people-are-buying.png"}
         alt="what peaple are buying"
-        width={50}
-        height={50}
-        className="absolute -left-32 top-1/3 hidden h-auto w-auto select-none xl:block"
+        width={150}
+        height={150}
+        className="absolute -left-32 top-1/3 hidden select-none xl:block"
         aria-hidden="true"
       />
 
