@@ -86,5 +86,6 @@ export function constructMetadata(params: ConstructMetadataParams): Metadata {
       creator: "MekuX",
     },
     icons,
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL!),
   };
 }
