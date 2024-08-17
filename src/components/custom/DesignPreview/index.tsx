@@ -64,6 +64,7 @@ export default function DesignPreview({ config }: Props) {
   });
 
   const handleCheckoutSession = () => {
+    console.log(user);
     if (user) {
       createPaymentSession({ configId: id });
     } else {
