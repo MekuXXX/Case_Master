@@ -50,13 +50,13 @@ export default function Home() {
               </ul>
 
               <div className="mv-12 flex flex-col items-center gap-2 sm:flex-row sm:items-start">
-                <div className="flex -space-x-4">
+                <div className="flex h-[40px] -space-x-4">
                   <Image
                     src={"/users/user-1.png"}
                     alt="user 1 image"
                     width={40}
-                    height={40}
-                    className="h-autoinline-block w-auto rounded-full ring-2 ring-slate-100"
+                    height={20}
+                    className="inline-block rounded-full object-cover ring-2 ring-slate-100"
                   />
 
                   <Image
@@ -64,7 +64,7 @@ export default function Home() {
                     alt="user 2 image"
                     width={40}
                     height={40}
-                    className="h-autoinline-block w-auto rounded-full ring-2 ring-slate-100"
+                    className="inline-block rounded-full object-cover ring-2 ring-slate-100"
                   />
 
                   <Image
@@ -72,7 +72,7 @@ export default function Home() {
                     alt="user 3 image"
                     width={40}
                     height={40}
-                    className="h-autoinline-block w-auto rounded-full ring-2 ring-slate-100"
+                    className="inline-block rounded-full object-cover ring-2 ring-slate-100"
                   />
 
                   <Image
@@ -80,7 +80,7 @@ export default function Home() {
                     alt="user 4 image"
                     width={40}
                     height={40}
-                    className="h-autoinline-block w-auto rounded-full ring-2 ring-slate-100"
+                    className="inline-block rounded-full object-cover ring-2 ring-slate-100"
                   />
 
                   <Image
@@ -88,7 +88,7 @@ export default function Home() {
                     alt="user 5 image"
                     width={40}
                     height={40}
-                    className="h-autoinline-block w-auto rounded-full object-cover ring-2 ring-slate-100"
+                    className="inline-block rounded-full object-cover ring-2 ring-slate-100"
                   />
                 </div>
 
