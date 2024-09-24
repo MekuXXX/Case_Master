@@ -12,15 +12,13 @@ type Props = {};
 export default function ThankYou({}: Props) {
   const searchParams = useSearchParams();
   const orderId = searchParams.get("orderId") || "";
-  const { data, isLoading } = useQuery({
+  const { data } = useQuery({
     queryKey: ["thank-you"],
     queryFn: async () => {
       const res = await fetch("/api/payment-status", {
         method: "POST",
         body: JSON.stringify({ orderId }),
       });
-      console.log("HItted");
-
       const data = (await res.json()) as Awaited<
         ReturnType<typeof getPaymentStatus>
       >;

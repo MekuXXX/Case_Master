@@ -10,6 +10,8 @@ type Props = {};
 export default async function Navbar({}: Props) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
+
+  // Note: For view now I will ADMIN_EMAIL to null to make this page visible for viewer
   const isAdmin = user?.email === process.env.ADMIN_EMAIL;
 
   return (
@@ -21,30 +23,26 @@ export default async function Navbar({}: Props) {
           </Link>
 
           <div className="flex h-full items-center space-x-4">
+            {/*Note: Must be protected but I make this just for the viewer*/}
+            <Link
+              href={"/dashboard"}
+              className={buttonVariants({
+                size: "sm",
+                variant: "ghost",
+              })}
+            >
+              Dashboard 💫
+            </Link>
             {user ? (
-              <>
-                <Link
-                  href={"/api/auth/logout"}
-                  className={buttonVariants({
-                    size: "sm",
-                    variant: "ghost",
-                  })}
-                >
-                  Logout
-                </Link>
-
-                {isAdmin ? (
-                  <Link
-                    href={"/dashboard"}
-                    className={buttonVariants({
-                      size: "sm",
-                      variant: "ghost",
-                    })}
-                  >
-                    Dashboard 💫
-                  </Link>
-                ) : undefined}
-              </>
+              <Link
+                href={"/api/auth/logout"}
+                className={buttonVariants({
+                  size: "sm",
+                  variant: "ghost",
+                })}
+              >
+                Logout
+              </Link>
             ) : (
               <>
                 <Link

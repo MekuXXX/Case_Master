@@ -45,7 +45,6 @@ export default function DesignPreview({ config }: Props) {
       return data;
     },
     onSuccess: ({ url }) => {
-      console.log(url);
       if (url) {
         router.push(url);
       } else {

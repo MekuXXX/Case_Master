@@ -29,9 +29,10 @@ export default async function DashboardPage({}: Props) {
   const { getUser } = getKindeServerSession();
   const user = await getUser();
 
-  if (!user || user?.email !== process.env.ADMIN_EMAIL) {
-    return notFound();
-  }
+  // Note: For view now I will ADMIN_EMAIL to null to make this page visible for viewer
+  // if (!user || user?.email !== process.env.ADMIN_EMAIL) {
+  // return notFound();
+  // }
 
   const orders = await db.order.findMany({
     where: {
