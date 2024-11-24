@@ -15,6 +15,8 @@ export default function AuthCallbackPage({}: Props) {
       // const res = await getAuthStatus(); // NOTE: There is problem when trying to use this action here as it return undefined
       const res = await fetch("/api/auth-status");
       const data = await res.json();
+      // // Note: I do this
+      // window.localStorage.setItem("email", data.email);
       return data;
     },
     retry: true,

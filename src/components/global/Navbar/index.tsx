@@ -1,18 +1,18 @@
 import React from "react";
 import MaxWidthWrapper from "../MaxWidthWrapper";
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
+import { auth } from "@/lib/auth";
+import { signOutAction } from "@/actions/auth";
 
 type Props = {};
 
 export default async function Navbar({}: Props) {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+  const session = await auth();
 
   // Note: For view now I will ADMIN_EMAIL to null to make this page visible for viewer
-  const isAdmin = user?.email === process.env.ADMIN_EMAIL;
+  const isAdmin = session?.user?.email === process.env.ADMIN_EMAIL;
 
   return (
     <nav className="sticky inset-x-0 top-0 z-[100] h-14 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all">
@@ -33,20 +33,16 @@ export default async function Navbar({}: Props) {
             >
               Dashboard 💫
             </Link>
-            {user ? (
-              <Link
-                href={"/api/auth/logout"}
-                className={buttonVariants({
-                  size: "sm",
-                  variant: "ghost",
-                })}
-              >
-                Logout
-              </Link>
+            {session?.user ? (
+              <form action={signOutAction}>
+                <Button variant={"ghost"} size={"sm"}>
+                  Logout
+                </Button>
+              </form>
             ) : (
               <>
                 <Link
-                  href={"/api/auth/login"}
+                  href={"/login"}
                   className={buttonVariants({
                     size: "sm",
                     variant: "ghost",
@@ -55,7 +51,7 @@ export default async function Navbar({}: Props) {
                   Login
                 </Link>
                 <Link
-                  href={"/api/auth/register"}
+                  href={"/register"}
                   className={buttonVariants({
                     size: "sm",
                     variant: "ghost",

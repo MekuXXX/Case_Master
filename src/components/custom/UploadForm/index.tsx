@@ -63,7 +63,6 @@ export default function UploadForm({}: Props) {
             "image/jpg": [".jpg"],
           }}
           onDragEnter={() => {
-            console.log("Entered");
             setIsDragOver(true);
           }}
           onDragLeave={() => setIsDragOver(false)}

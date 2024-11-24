@@ -1,10 +1,10 @@
 "use server";
 
+import { auth } from "@/lib/auth";
 import { calculateTotalPrice } from "@/lib/configuration";
 import db from "@/lib/db";
 import { stripe } from "@/lib/stripe";
 import { PRICE_TYPE } from "@/lib/utils";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
 import { Order } from "@prisma/client";
 
 type CreateCheckoutType = {
@@ -17,8 +17,13 @@ export async function createCheckoutSession({ configId }: CreateCheckoutType) {
     throw new Error("No such configuration found");
   }
 
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+  const session = await auth();
+
+  if (!session) {
+    throw new Error("You need to be logged in");
+  }
+
+  const { user } = session;
 
   if (!user) {
     throw new Error("You need to be logged in");
@@ -29,18 +34,19 @@ export async function createCheckoutSession({ configId }: CreateCheckoutType) {
 
   const existingOrder = await db.order.findFirst({
     where: {
-      userId: user.id,
+      userId: user.id!,
       configurationId: config.id,
     },
   });
+  console.log("User:", user);
 
   if (existingOrder) {
     order = existingOrder;
   } else {
     order = await db.order.create({
       data: {
+        userId: user.id!,
         amount: totalPrice / 100,
-        userId: user.id,
         configurationId: config.id,
       },
     });
@@ -56,16 +62,16 @@ export async function createCheckoutSession({ configId }: CreateCheckoutType) {
   });
 
   const stripeSession = await stripe.checkout.sessions.create({
+    line_items: [{ price: product.default_price as string, quantity: 1 }],
+    metadata: {
+      userId: user.id!,
+      orderId: order.id,
+    },
     success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/thank-you?orderId=${order.id}`,
     cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/configure/preview?id=${config.id}`,
     payment_method_types: ["card"],
     mode: "payment",
     shipping_address_collection: { allowed_countries: ["DE", "EG", "US"] },
-    metadata: {
-      userId: user.id,
-      orderId: order.id,
-    },
-    line_items: [{ price: product.default_price as string, quantity: 1 }],
   });
 
   return { url: stripeSession.url };
@@ -75,10 +81,9 @@ type GetPaymentStatusParams = {
   orderId: string;
 };
 export async function getPaymentStatus(params: GetPaymentStatusParams) {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+  const session = await auth();
 
-  if (!user?.id || !user?.email) {
+  if (!session) {
     throw new Error("You need to be logged in to view this page");
   }
 

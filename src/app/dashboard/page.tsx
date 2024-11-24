@@ -17,17 +17,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { auth } from "@/lib/auth";
 import db from "@/lib/db";
 import { formatPrice } from "@/lib/utils";
-import { getKindeServerSession } from "@kinde-oss/kinde-auth-nextjs/server";
-import { notFound } from "next/navigation";
 import React from "react";
 
 type Props = {};
 
 export default async function DashboardPage({}: Props) {
-  const { getUser } = getKindeServerSession();
-  const user = await getUser();
+  // const session = await auth();
 
   // Note: For view now I will ADMIN_EMAIL to null to make this page visible for viewer
   // if (!user || user?.email !== process.env.ADMIN_EMAIL) {
@@ -127,10 +125,15 @@ export default async function DashboardPage({}: Props) {
                 </CardFooter>
               </Card>
             </div>
-
-            <h1 className="text-4xl font-bold tracking-tight">
-              Incoming orders
-            </h1>
+            <div>
+              <h1 className="text-4xl font-bold tracking-tight">
+                Incoming orders
+              </h1>
+              <p className="text-sm text-gray-500">
+                Note: This route must be hidden and protected, but I have
+                disabled validation for demonstration purposes.
+              </p>
+            </div>
             <Table>
               <TableHeader>
                 <TableRow>

@@ -45,8 +45,10 @@ enum CASE_FINISH {
 }
 
 model User {
-  id        String   @id
-  email     String
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
   Order     Order[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

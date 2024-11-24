@@ -12,14 +12,15 @@ import { calculateTotalPrice } from "@/lib/configuration";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
-import { useKindeBrowserClient } from "@kinde-oss/kinde-auth-nextjs";
 import LoginModal from "@/components/global/LoginModal";
+import { User } from "next-auth";
 
 type Props = {
   config: Configuration;
+  user?: (User & { id: string }) | null;
 };
 
-export default function DesignPreview({ config }: Props) {
+export default function DesignPreview({ config, user }: Props) {
   const { color, model, croppedImageUrl, finish, material, id } = config;
   const twColor = COLORS.find(
     (supportedColor) => supportedColor.value === color,
@@ -32,7 +33,6 @@ export default function DesignPreview({ config }: Props) {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
   const router = useRouter();
   const { toast } = useToast();
-  const { user } = useKindeBrowserClient();
   const { mutate: createPaymentSession } = useMutation({
     mutationKey: ["get-checkout-session"],
     mutationFn: async ({ configId }: { configId: string }) => {
@@ -41,19 +41,17 @@ export default function DesignPreview({ config }: Props) {
         body: JSON.stringify({ configId }),
       });
       const data = (await res.json()) as { url: string | undefined };
-      console.log(data);
       return data;
     },
     onSuccess: ({ url }) => {
       if (url) {
-        router.push(url);
+        router.replace(url);
       } else {
         throw new Error("Unable to retrieve payment URL");
       }
     },
 
-    onError: ({ message }) => {
-      console.log(message);
+    onError: ({}) => {
       toast({
         title: "Something went wrong",
         description: "There was an error on our end. Please try again.",
@@ -62,9 +60,8 @@ export default function DesignPreview({ config }: Props) {
     },
   });
 
-  const handleCheckoutSession = () => {
-    console.log(user);
-    if (user) {
+  const handleCheckoutSession = async () => {
+    if (user?.email) {
       createPaymentSession({ configId: id });
     } else {
       window.localStorage.setItem("configId", id);

@@ -9,6 +9,7 @@ export async function POST(req: Request) {
     if (!configId) {
       throw new Error("Missing the config id of the session");
     }
+
     const session = await createCheckoutSession({ configId });
     return NextResponse.json(session, {
       status: 200,

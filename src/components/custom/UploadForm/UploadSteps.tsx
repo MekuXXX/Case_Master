@@ -33,7 +33,6 @@ export default function UploadSteps({}: Props) {
   const headerList = headers();
   const pathname = headerList.get("x-current-path");
 
-  console.log(pathname);
   return (
     <ol className="lg:border-1 rounded-md bg-white lg:flex lg:rounded-none lg:border-r lg:border-none lg:border-gray-200">
       {STEPS.map((step, index) => {
