@@ -1,12 +1,11 @@
+import OrderRecievedEmail from "@/components/emails/OrderRecievedEmail";
 import db from "@/lib/db";
+import { sendMail } from "@/lib/nodemailer";
 import { stripe } from "@/lib/stripe";
+import { render } from "@react-email/components";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { Resend } from "resend";
-import OrderRecievedEmail from "@/components/emails/OrderRecievedEmail";
-
-// const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(res: Request) {
   try {
@@ -67,33 +66,42 @@ export async function POST(res: Request) {
               },
             },
           },
+          include: {
+            user: { select: { email: true, name: true } },
+          },
         });
+        const renderedEmail = render(
+          OrderRecievedEmail({
+            orderId,
+            orderDate: updatedOrder.createdAt.toLocaleDateString(),
+            // @ts-ignore
+            shippingAddress: {
+              name: session.customer_details!.name!,
+              city: shippingAddress!.city!,
+              country: shippingAddress!.country!,
+              postalCode: shippingAddress!.postal_code!,
+              street: shippingAddress!.line1!,
+              state: shippingAddress!.state,
+            },
+          }),
+        );
 
-        // await resend.emails.send({
-        //   from: "CaseMaster <mekux@testing.com>",
-        //   to: [event.data.object.customer_details.email],
-        //   subject: "Thanks for your order!",
-        //   react: OrderRecievedEmail({
-        //     orderId,
-        //     orderDate: updatedOrder.createdAt.toLocaleDateString(),
+        await sendMail({
+          recipients: [
+            {
+              name: updatedOrder.user.name,
+              address: updatedOrder.user.email,
+            },
+          ],
 
-        //     // @ts-ignore
-        //     shippingAddress: {
-        //       name: session.customer_details!.name!,
-        //       city: shippingAddress!.city!,
-        //       country: shippingAddress!.country!,
-        //       postalCode: shippingAddress!.postal_code!,
-        //       street: shippingAddress!.line1!,
-        //       state: shippingAddress!.state,
-        //     },
-        //   }),
-        // });
+          subject: "Thanks for your order!",
+          html: renderedEmail,
+        });
       }
     }
 
     return NextResponse.json({ result: event, ok: true });
   } catch (err) {
-    console.log(err);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 500 },

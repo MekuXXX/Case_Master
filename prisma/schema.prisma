@@ -45,11 +45,37 @@ enum CASE_FINISH {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  password  String
-  Order     Order[]
+  id                  String                @id @default(cuid())
+  name                String
+  email               String                @unique
+  password            String
+  isActive            Boolean               @default(false)
+  ativatedAt          DateTime?
+  Order               Order[]
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  activationToken     ActivationToken[]
+  ForgotPasswordToken ForgotPasswordToken[]
+}
+
+model ActivationToken {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expireAt DateTime
+  isUsed   Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ForgotPasswordToken {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expireAt DateTime
+  isUsed   Boolean  @default(false)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

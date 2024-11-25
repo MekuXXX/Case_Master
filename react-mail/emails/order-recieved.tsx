@@ -22,7 +22,21 @@ type Props = {
 };
 
 export default function OrderRecievedEmail(params: Props) {
-  const { shippingAddress, orderDate, orderId } = params;
+  const {
+    shippingAddress = {
+      city: "New York",
+      country: "US",
+      name: "Alex Peter",
+      email: "example@example.com",
+      postalCode: "123",
+      state: "Kalifornia",
+      phoneNumber: "+1432525555",
+      street: "Anonymus",
+      id: Math.random(),
+    },
+    orderDate = new Date().toUTCString(),
+    orderId = Math.round(Math.random() * 9999999999),
+  } = params;
   return (
     <Html>
       <Head />
@@ -31,7 +45,8 @@ export default function OrderRecievedEmail(params: Props) {
         <Container style={container}>
           <Section style={message}>
             <Img
-              src={`${process.env.NEXT_PUBLIC_SERVER_URL}/snake-3.png`}
+              // src={`${process.env.NEXT_PUBLIC_SERVER_URL}/snake-3.png`}
+              src={`http://localhost:3000/static/snake-3.png`}
               width="65"
               height="73"
               alt="Deliveryy snake"
@@ -57,7 +72,7 @@ export default function OrderRecievedEmail(params: Props) {
           </Section>
           <Hr style={global.hr} />
           <Section style={global.defaultPadding}>
-            <Row style={{ display: "inline-flex gap-24", marginBottom: 40 }}>
+            <Row style={{ display: "inline-flex gap-16", marginBottom: 40 }}>
               <Column style={{ width: 170 }}>
                 <Text style={global.paragraphWithBold}>Order Number</Text>
                 <Text style={track.number}>{orderId}</Text>

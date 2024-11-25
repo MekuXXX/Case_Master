@@ -111,10 +111,11 @@ export function RegisterForm() {
                 </p>
               )}
             </div>
-            <Button disabled={isPending}>
-              {isPending && (
-                <LucideCircle className="mr-2 h-4 w-4 animate-spin" />
-              )}
+            <Button
+              disabled={isPending}
+              isLoading={isPending}
+              loadingText="Loading"
+            >
               Register
             </Button>
           </div>

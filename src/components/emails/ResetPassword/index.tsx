@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Body,
-  Column,
   Container,
   Head,
   Heading,
@@ -12,21 +11,21 @@ import {
   Row,
   Section,
   Text,
+  Link,
 } from "@react-email/components";
-import { ShippingAddress } from "@prisma/client";
 
 type Props = {
-  shippingAddress: ShippingAddress;
-  orderId: string;
-  orderDate: String;
+  resetLink: string;
+  userName: string;
 };
 
-export default function OrderRecievedEmail(params: Props) {
-  const { shippingAddress, orderDate, orderId } = params;
+export default function ResetPasswordEmail(params: Props) {
+  const { resetLink, userName } = params;
+
   return (
     <Html>
       <Head />
-      <Preview>Your order summary and estimated delivery date</Preview>
+      <Preview>Reset your password</Preview>
       <Body style={main}>
         <Container style={container}>
           <Section style={message}>
@@ -34,39 +33,30 @@ export default function OrderRecievedEmail(params: Props) {
               src={`${process.env.NEXT_PUBLIC_SERVER_URL}/snake-3.png`}
               width="65"
               height="73"
-              alt="Deliveryy snake"
+              alt="Case Master Logo"
               style={{ margin: "auto" }}
             />
-            <Heading style={global.heading}>Thank you for your order!</Heading>
-            <Text style={global.text}>
-              We're preparing everything for delivery and will notify you once
-              your package has been shipped. Delivery usually takes 2 days.
+            <Heading style={global.heading}>Reset Your Password</Heading>
+            <Text style={global.text}>Hi {userName},</Text>
+            <Text style={{ ...global.text, marginTop: 16 }}>
+              We received a request to reset your password for your Case Master
+              account. You can reset your password by clicking the button below:
             </Text>
+            <Section style={{ textAlign: "center", marginTop: 24 }}>
+              <Link
+                href={resetLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={global.button}
+              >
+                Reset Password
+              </Link>
+            </Section>
             <Text style={{ ...global.text, marginTop: 24 }}>
-              If you have any questions regarding your order, please feel free
-              to contact us with your order number and we're here to help.
+              If you didn’t request a password reset, you can safely ignore this
+              email. Your password will not change until you access the link
+              above and create a new one.
             </Text>
-          </Section>
-          <Hr style={global.hr} />
-          <Section style={global.defaultPadding}>
-            <Text style={adressTitle}>Shipping to: {shippingAddress.name}</Text>
-            <Text style={{ ...global.text, fontSize: 14 }}>
-              {shippingAddress.street}, {shippingAddress.city},{" "}
-              {shippingAddress.state} {shippingAddress.postalCode}
-            </Text>
-          </Section>
-          <Hr style={global.hr} />
-          <Section style={global.defaultPadding}>
-            <Row style={{ display: "inline-flex gap-24", marginBottom: 40 }}>
-              <Column style={{ width: 170 }}>
-                <Text style={global.paragraphWithBold}>Order Number</Text>
-                <Text style={track.number}>{orderId}</Text>
-              </Column>
-              <Column style={{ marginLeft: 20 }}>
-                <Text style={global.paragraphWithBold}>Order Date</Text>
-                <Text style={track.number}>{orderDate}</Text>
-              </Column>
-            </Row>
           </Section>
 
           <Hr style={global.hr} />
@@ -132,15 +122,17 @@ const global = {
     fontWeight: "500",
   },
   button: {
-    border: "1px solid #929292",
     fontSize: "16px",
     textDecoration: "none",
-    padding: "10px 0px",
+    padding: "10px 20px",
     width: "220px",
-    display: "block",
+    display: "inline-block",
     textAlign: "center",
     fontWeight: 500,
-    color: "#000",
+    color: "white",
+    backgroundColor: "hsl(142.1 76.2% 36.3%)",
+    borderRadius: "5px",
+    cursor: "pointer",
   } as React.CSSProperties,
   hr: {
     borderColor: "#E5E5E5",
@@ -161,35 +153,12 @@ const container = {
   border: "1px solid #E5E5E5",
 };
 
-const track = {
-  container: {
-    padding: "22px 40px",
-    backgroundColor: "#F7F7F7",
-  },
-  number: {
-    margin: "12px 0 0 0",
-    fontWeight: 500,
-    lineHeight: "1.4",
-    color: "#6F6F6F",
-  },
-};
-
 const message = {
   padding: "40px 74px",
   textAlign: "center",
 } as React.CSSProperties;
 
-const adressTitle = {
-  ...paragraph,
-  fontSize: "15px",
-  fontWeight: "bold",
-};
-
 const footer = {
-  policy: {
-    width: "166px",
-    margin: "auto",
-  },
   text: {
     margin: "0",
     color: "#AFAFAF",

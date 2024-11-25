@@ -38,7 +38,6 @@ export async function createCheckoutSession({ configId }: CreateCheckoutType) {
       configurationId: config.id,
     },
   });
-  console.log("User:", user);
 
   if (existingOrder) {
     order = existingOrder;

@@ -21,6 +21,7 @@ import { LucideCircle } from "lucide-react";
 import { loginAction } from "@/actions/auth";
 import { useRouter } from "next/navigation";
 import ProvidersButtons from "@/components/authentication/ProvidersButtons";
+import { AuthError } from "next-auth";
 
 export function LoginForm() {
   const [isLoading, startTransition] = useTransition();
@@ -37,7 +38,7 @@ export function LoginForm() {
   async function onSubmit(data: LoginSchema) {
     startTransition(async () => {
       try {
-        await loginAction(data);
+        const res = await loginAction(data);
 
         toast({
           title: "Login Successful",
@@ -49,7 +50,8 @@ export function LoginForm() {
         if (error instanceof Error) {
           toast({
             title: "Something went wrong",
-            description: "Email or password is incorrect",
+            description:
+              "Email or password is incorrect or activate the account",
             variant: "destructive",
           });
         }
@@ -97,10 +99,11 @@ export function LoginForm() {
                 </p>
               )}
             </div>
-            <Button disabled={isLoading}>
-              {isLoading && (
-                <LucideCircle className="mr-2 h-4 w-4 animate-spin" />
-              )}
+            <Button
+              disabled={isLoading}
+              isLoading={isLoading}
+              loadingText="Signing in"
+            >
               Sign In
             </Button>
           </div>
@@ -132,7 +135,7 @@ export function LoginForm() {
         </div>
         <Link
           aria-label="Reset password"
-          href="/reset-password"
+          href="/forget-password"
           className="text-sm text-primary underline-offset-4 transition-colors hover:underline"
         >
           Reset password
